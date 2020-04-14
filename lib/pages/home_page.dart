@@ -1,4 +1,5 @@
 import 'package:notes_app/model/note.dart';
+import 'package:notes_app/widgets/new_note_dialog.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -7,8 +8,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //List<Note> notes = new List<Note>();
-  List<String> notes = List<String>.generate(20, (i) => "Item ${i + 1}");
+  List<Note> notes = new List<Note>();
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _list(),
       floatingActionButton: new FloatingActionButton(
-        onPressed: _addNote, tooltip: 'Add task', child: new Icon(Icons.add)
+        onPressed: () =>_addNote(), tooltip: 'Add task', child: new Icon(Icons.add)
       ),
     );
   }
@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _item(String element, int position){
+  Widget _item(Note element, int position){
     return Dismissible(
       background: _backgroundSlide(),
       key: UniqueKey(),
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   content: Text(
-                      "Are you sure you want to delete ${notes[position]}?"),
+                      "Are you sure you want to delete ${notes[position].title}?"),
                   actions: <Widget>[
                     FlatButton(
                       child: Text(
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     FlatButton(
                       child: Text(
-                        "Delete",
+                        "Add",
                         style: TextStyle(color: Colors.red),
                       ),
                       onPressed: () {
@@ -115,9 +115,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _addNote(){
-    setState(() {
-      //notes.add(new Note(title: "itemT", body: "itemB", completed: 0 ));
-    });
+  void _addNote() async {
+    final note = await showDialog<Note>(
+      context: context,
+      builder: (BuildContext context) {
+        return NewNoteDialog();
+      },
+    );
+
+    if (note != null) {
+      setState(() {
+        notes.add(note);
+      }); 
+    }  
   }
 }
