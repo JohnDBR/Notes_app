@@ -120,6 +120,8 @@ class _HomePageState extends State<HomePage> {
   void _addNote(){
     setState(() {
       //notes.add(new Note(title: "itemT", body: "itemB", completed: 0 ));
+
+      notes.add();
     });
   }
 
