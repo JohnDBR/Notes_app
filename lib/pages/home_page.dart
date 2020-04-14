@@ -7,6 +7,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+   TextEditingController _textFieldController = TextEditingController();
   //List<Note> notes = new List<Note>();
   List<String> notes = List<String>.generate(20, (i) => "Item ${i + 1}");
 
@@ -18,7 +20,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _list(),
       floatingActionButton: new FloatingActionButton(
-        onPressed: _addNote, tooltip: 'Add task', child: new Icon(Icons.add)
+        onPressed: onPressed: () => _displayDialog(context), tooltip: 'Add task', child: new Icon(Icons.add)
       ),
     );
   }
@@ -119,5 +121,37 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       //notes.add(new Note(title: "itemT", body: "itemB", completed: 0 ));
     });
+  }
+
+
+  _displayDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('New Note'),
+            content: TextField(
+              controller: _textFieldController,
+              decoration: InputDecoration(hintText: "Tittle"),
+            ),TextField(
+              controller: _textFieldController,
+              decoration: InputDecoration(hintText: "Body"),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('CANCEL'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+               new FlatButton(
+                child: new Text('DONE'),
+                onPressed: () {
+                  _addNote;
+                },
+              )
+            ],
+          );
+        });
   }
 }
