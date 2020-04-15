@@ -29,12 +29,12 @@ class _HomePageState extends State<HomePage> {
       itemCount: notes.length,
       itemBuilder: (context, position) {
         var element = notes[position];
-        return _item(element, position, element.title, element.body);
+        return _item(element, position);
       },
     );
   }
 
-  Widget _item(Note element, int position, String title, String Body) {
+  Widget _item(Note element, int position) {
     return Dismissible(
         background: _backgroundSlide(),
         key: UniqueKey(),
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     content: Text(
-                        "Are you sure you want to delete ${notes[position].title}?"),
+                        "Are you sure you want to delete ${element.title}?"),
                     actions: <Widget>[
                       FlatButton(
                         child: Text(
@@ -82,13 +82,34 @@ class _HomePageState extends State<HomePage> {
             child: InkWell(
                 onTap: () {
                   print("${notes[position]} clicked");
+                  _onTap(context, element, position);
                 },
                 child: ListTile(
-                  leading: Icon(Icons.add_circle),
-                  title: Text(title),
-                  subtitle: Text(Body),
+                  leading: Builder(
+                    builder: (context) {
+                      switch (element.type) {
+                        case Note.DEFAULT:
+                          return Icon(Icons.check, size: 72.0);
+                        case Note.CALL:
+                          return Icon(Icons.call, size: 72.0);
+                        case Note.HOMEWORK:
+                          return Icon(Icons.contacts, size: 72.0);
+                        default:
+                        return Icon(Icons.dialpad, size: 72.0);
+                      }
+                    }),
+                  title: Text(element.title),
+                  subtitle: Text(element.body),
                 )) // ListTile(title: Text('$element')),
             ));
+  }
+
+  void _onTap(BuildContext context, Note location, int index) {
+    setState(() {
+        if (notes[index].completed == 0) {
+          notes[index].completed = 1;
+        }
+    });
   }
 
   Widget _backgroundSlide() {
