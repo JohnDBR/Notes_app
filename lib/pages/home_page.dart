@@ -84,6 +84,7 @@ class _HomePageState extends State<HomePage> {
                   print("${notes[position]} clicked");
                 },
                 child: ListTile(
+                  leading: Icon(Icons.add_circle),
                   title: Text(title),
                   subtitle: Text(Body),
                 )) // ListTile(title: Text('$element')),
