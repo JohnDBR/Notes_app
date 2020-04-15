@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/model/note.dart';
+import 'package:notes_app/widgets/note_type_dropdown.dart';
 
 class NewNoteDialog extends StatefulWidget {
-  NewNoteDialog({Key key, this.title}) : super(key: key);
-
-  final String title;
-
+  
   @override
    _NewNoteDialogState createState() => _NewNoteDialogState();
 }
 class _NewNoteDialogState extends State<NewNoteDialog> {
 
+  String _dropSelected = "DEFAULT";
   final controllerTitle = new TextEditingController();
   final controllerBody = new TextEditingController();
 
@@ -40,32 +39,42 @@ class _NewNoteDialogState extends State<NewNoteDialog> {
            // teamName = value;
          },
        ),
-       FlatButton(
-         child: Text(
-           "Cancel",
-           style: TextStyle(color: Colors.black),
-         ),
-         onPressed: () {
-           Navigator.of(context).pop();
-         },
-       ),
-       FlatButton(
-         child: Text(
-           "Add",
-           style: TextStyle(color: Colors.green),
-         ),
-         onPressed: () {
-            final todo = new Note(
-              title: controllerTitle.value.text,
-              body: controllerBody.value.text,
-              completed: 0
-            );
-            controllerTitle.clear();
-            controllerBody.clear();
+       NoteTypeDropdown(
+         selected: _dropSelected,
+         onChangedValue: (value) => setState(() {
+           _dropSelected = value;
+       })),
+       Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            FlatButton(
+          child: Text(
+            "Cancel",
+            style: TextStyle(color: Colors.black),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+            FlatButton(
+              child: Text(
+                "Add",
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () {
+                final note = new Note(
+                  title: controllerTitle.value.text,
+                  body: controllerBody.value.text,
+                  completed: 0,
+                  type: _dropSelected
+                );
+                controllerTitle.clear();
+                controllerBody.clear();
 
-            Navigator.of(context).pop(todo);
-         },
-       )]
+                Navigator.of(context).pop(note);
+            })
+          ]
+        )]
       )
     );
   }

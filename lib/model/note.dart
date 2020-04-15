@@ -3,11 +3,13 @@ class Note {
   String title;
   String body;
   int completed;
+  String type;
   Note(
     {
       this.title, 
       this.body, 
-      this.completed
+      this.completed,
+      this.type
     }
   );
 }
