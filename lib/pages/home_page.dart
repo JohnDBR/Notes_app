@@ -108,6 +108,8 @@ class _HomePageState extends State<HomePage> {
     setState(() {
         if (notes[index].completed == 0) {
           notes[index].completed = 1;
+        } else {
+          notes[index].completed = 0;
         }
     });
   }
